@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Ploy (Pei Pei)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ตั้งค่าพื้นฐาน */
+        body {
+            font-family: 'Mali', cursive;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        /* กล่องข้อความหลัก */
+        .card {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 90%;
+            width: 400px;
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 {
+            color: #ff6b6b;
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #555;
+            font-size: 18px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        /* ปุ่มกด */
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Mali', cursive;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            outline: none;
+        }
+
+        .btn-yes {
+            background-color: #ff6b6b;
+            color: white;
+        }
+
+        .btn-yes:hover {
+            background-color: #ee5253;
+            transform: scale(1.05);
+        }
+
+        .btn-no {
+            background-color: #f1f2f6;
+            color: #555;
+        }
+
+        .btn-no:hover {
+            background-color: #dfe4ea;
+        }
+
+        /* จัดการหน้าต่างๆ */
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Animation สั่นปุ่มตอนเปลี่ยนร่าง */
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+
+        .shake-btn {
+            animation: shake 0.3s;
+        }
+
+        /* Custom Popup */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .popup-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 80%;
+            animation: popIn 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
+        }
+
+        /* Background หัวใจลอย */
+        .hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        .heart {
+            position: absolute;
+            bottom: -100px;
+            background-color: rgba(255, 255, 255, 0.5);
+            width: 20px;
+            height: 20px;
+            transform: rotate(45deg);
+            animation: floatUp 10s linear infinite;
+        }
+        .heart::before, .heart::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+        }
+        .heart::before { top: -10px; left: 0; }
+        .heart::after { top: 0; left: -10px; }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(45deg); opacity: 0.8; }
+            100% { transform: translateY(-100vh) rotate(45deg); opacity: 0; }
+        }
+
+        /* Animation เครื่องบิน */
+        .airplane-scene {
+            position: relative;
+            height: 300px;
+            margin: 30px 0;
+        }
+
+        .airplane {
+            font-size: 80px;
+            position: absolute;
+            left: -100px;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: flyAcross 4s ease-in-out infinite;
+        }
+
+        @keyframes flyAcross {
+            0% {
+                left: -100px;
+                top: 60%;
+                transform: translateY(-50%) rotate(-5deg);
+            }
+            25% {
+                top: 40%;
+            }
+            50% {
+                top: 30%;
+            }
+            75% {
+                top: 45%;
+            }
+            100% {
+                left: calc(100% + 100px);
+                top: 60%;
+                transform: translateY(-50%) rotate(5deg);
+            }
+        }
+
+        .cloud {
+            position: absolute;
+            font-size: 50px;
+            opacity: 0.7;
+            animation: floatCloud 15s linear infinite;
+        }
+
+        .cloud:nth-child(1) {
+            top: 20%;
+            animation-delay: 0s;
+        }
+
+        .cloud:nth-child(2) {
+            top: 60%;
+            animation-delay: 5s;
+        }
+
+        .cloud:nth-child(3) {
+            top: 40%;
+            animation-delay: 10s;
+        }
+
+        @keyframes floatCloud {
+            0% {
+                left: -100px;
+            }
+            100% {
+                left: calc(100% + 100px);
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="hearts" id="heartsContainer"></div>
+
+    <div class="card">
+        <div id="page1" class="page active">
+            <h1>💌 จดหมายจากพี่โอเว่น</h1>
+            <p>มีจดหมายมาส่งงับ จะเปิดดูไหมเอ่ย?</p>
+            <div class="btn-group">
+                <button class="btn-yes" onclick="nextPage(2)">เปิดดูสิ</button>
+                <button class="btn-no" onclick="showPopup('จะไม่ดูจริงๆ หรอไอ้อ้วน! 🥺')">ไม่เปิด</button>
+            </div>
+        </div>
+
+        <div id="page2" class="page">
+            <h1>✨ 2026 นี้...</h1>
+            <p>เธออยากไปกับเค้าต่อไหม?</p>
+            <div class="btn-group">
+                <button class="btn-yes" onclick="checkPage2(true)">ไปดิค้าบ</button>
+                <button class="btn-no" onclick="checkPage2(false)">ไม่อะ</button>
+            </div>
+        </div>
+
+        <div id="page3" class="page">
+            <h1>💖 คำถามสำคัญ</h1>
+            <p>เธอเป็นแฟนกับเค้าไหม?</p>
+            <div class="btn-group">
+                <button class="btn-yes" onclick="nextPage(4)">เป็นแฟนกัน</button>
+                <button class="btn-no" id="btn-change" onclick="transformButton()">ไม่เป็น</button>
+            </div>
+        </div>
+
+        <div id="page4" class="page">
+            <h1>📅 เราคบกันมากี่ปีแล้ว?</h1>
+            <p>ตอบให้ถูกนะจ๊ะคนเก่ง</p>
+            <div class="btn-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <button class="btn-no" onclick="showPopup('ผิดงับ ลองใหม่อีกทีนะ 😝')">1 ปี</button>
+                <button class="btn-no" onclick="showPopup('น้อยไปป่าววว ลองใหม่ 😝')">2 ปี</button>
+                <button class="btn-yes" onclick="finishQuiz()">3 ปี</button>
+                <button class="btn-no" onclick="showPopup('ยังไม่ถึง 4 ปีเลย รีบหรอออ 😝')">4 ปี</button>
+            </div>
+        </div>
+
+        <div id="page5" class="page">
+            <h1>🎉 เย้! ที่รักเก่งมาก</h1>
+            <p>
+                2026 นี้ขอให้เธอมีความสุขมากๆ นะ<br>
+                <b>พี่โอเว่นรักน้องพลอย (เพ่ยเพ่ย) มากนะงับ</b><br><br>
+                ไว้เราไปเที่ยว 🇯🇵 ญี่ปุ่นกันนะงับปีนี้<br>
+                และปีอื่นเค้าก็จะพาเธอไปต่างประเทศอีกแน่นอน<br>
+                คนเก่งของเรา ❤️
+            </p>
+            <button class="btn-yes" onclick="nextPage(6)" style="margin-top: 20px;">ต่อไป →</button>
+        </div>
+
+        <div id="page6" class="page">
+            <h1>🗾 คำถามสุดท้าย</h1>
+            <p>จะไปญี่ปุ่นกับพี่โอเว่นไหม?</p>
+            <div class="btn-group">
+                <button class="btn-yes" onclick="goToJapan()">ไปสิค้าบ! ✈️</button>
+                <button class="btn-no" onclick="showPopup('อ้าวว~ พี่เสียใจจัง 🥺💔')">ไว้คิดก่อน</button>
+            </div>
+        </div>
+
+        <div id="page7" class="page">
+            <h1>🎌 ไปญี่ปุ่นกันเลย!</h1>
+            <div class="airplane-scene">
+                <div class="airplane">✈️</div>
+                <div class="cloud">☁️</div>
+                <div class="cloud">☁️</div>
+                <div class="cloud">☁️</div>
+            </div>
+            <p style="margin-top: 20px;">
+                <b>เย้ๆๆ ไปกันน้าา! 🎉</b><br><br>
+                รอวันนั้นกันนะจ๊ะที่รัก 💕<br>
+                พี่โอเว่นจะดูแลเธอดีๆเลย 🥰<br><br>
+                <span style="font-size: 24px;">🇯🇵 ❤️</span>
+            </p>
+        </div>
+    </div>
+
+    <div id="customPopup" class="popup-overlay" onclick="closePopup()">
+        <div class="popup-content">
+            <p id="popupText" style="font-size: 20px; color: #333; margin: 0;">ข้อความแจ้งเตือน</p>
+            <br>
+            <button class="btn-yes" onclick="closePopup()">โอเคงับ</button>
+        </div>
+    </div>
+
+    <script>
+        function nextPage(pageNumber) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            document.getElementById('page' + pageNumber).classList.add('active');
+        }
+
+        function checkPage2(isYes) {
+            if (isYes) {
+                showPopup("น่ารักมากเลยเลอ ถือว่ามาถูกทางละนะงับ 🥰", function() {
+                    nextPage(3);
+                });
+            } else {
+                showPopup("เธอคิดใหม่อีกทีนะงับอ้วน มุแงงือๆ 😭");
+            }
+        }
+
+        function transformButton() {
+            const btn = document.getElementById('btn-change');
+            btn.innerText = "เป็นแฟนกัน";
+            btn.className = "btn-yes shake-btn";
+            btn.onclick = function() { nextPage(4); };
+        }
+
+        function finishQuiz() {
+            showPopup("ที่รักเทอเก่งมากที่มาถึงตรงนี้! 👏", function() {
+                nextPage(5);
+            });
+        }
+
+        function goToJapan() {
+            showPopup("จัดกระเป๋าได้เลย! กำลังบินไปญี่ปุ่นน้าา 🛫", function() {
+                nextPage(7);
+            });
+        }
+
+        function showPopup(message, callback) {
+            document.getElementById('popupText').innerText = message;
+            document.getElementById('customPopup').style.display = 'flex';
+            window.currentCallback = callback;
+        }
+
+        function closePopup() {
+            document.getElementById('customPopup').style.display = 'none';
+            if (window.currentCallback) {
+                window.currentCallback();
+                window.currentCallback = null;
+            }
+        }
+
+        function createHearts() {
+            const container = document.getElementById('heartsContainer');
+            for(let i=0; i<20; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = Math.random() * 5 + 5 + 's';
+                heart.style.opacity = Math.random();
+                container.appendChild(heart);
+            }
+        }
+        createHearts();
+    </script>
+</body>
+</html>
