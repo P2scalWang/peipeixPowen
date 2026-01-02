@@ -6,7 +6,7 @@
     <title>For My Ploy (Pei Pei)</title>
     <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ตั้งค่าพื้นฐาน */
+        /* --- ตั้งค่าพื้นฐาน (เหมือนเดิม) --- */
         body {
             font-family: 'Mali', cursive;
             background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
@@ -19,7 +19,6 @@
             text-align: center;
         }
 
-        /* กล่องข้อความหลัก */
         .card {
             background-color: rgba(255, 255, 255, 0.95);
             padding: 40px;
@@ -31,218 +30,148 @@
             z-index: 10;
         }
 
-        h1 {
-            color: #ff6b6b;
-            font-size: 26px;
-            margin-bottom: 20px;
-        }
-
-        p {
-            color: #555;
-            font-size: 18px;
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
+        h1 { color: #ff6b6b; font-size: 26px; margin-bottom: 20px; }
+        p { color: #555; font-size: 18px; margin-bottom: 30px; line-height: 1.6; }
 
         /* ปุ่มกด */
-        .btn-group {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
+        .btn-group { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
         button {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 50px;
-            font-family: 'Mali', cursive;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            outline: none;
+            padding: 12px 25px; border: none; border-radius: 50px;
+            font-family: 'Mali', cursive; font-size: 16px; cursor: pointer;
+            transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.1); outline: none;
         }
-
-        .btn-yes {
-            background-color: #ff6b6b;
-            color: white;
-        }
-
-        .btn-yes:hover {
-            background-color: #ee5253;
-            transform: scale(1.05);
-        }
-
-        .btn-no {
-            background-color: #f1f2f6;
-            color: #555;
-        }
-
-        .btn-no:hover {
-            background-color: #dfe4ea;
-        }
+        .btn-yes { background-color: #ff6b6b; color: white; }
+        .btn-yes:hover { background-color: #ee5253; transform: scale(1.05); }
+        .btn-no { background-color: #f1f2f6; color: #555; }
+        .btn-no:hover { background-color: #dfe4ea; }
 
         /* จัดการหน้าต่างๆ */
-        .page {
-            display: none;
-            animation: fadeIn 0.5s ease-in-out;
-        }
+        .page { display: none; animation: fadeIn 0.5s ease-in-out; }
+        .active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Animation สั่นปุ่มตอนเปลี่ยนร่าง */
+        /* Shake Animation */
         @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
+            0% { transform: translateX(0); } 25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); } 75% { transform: translateX(-5px); }
             100% { transform: translateX(0); }
         }
+        .shake-btn { animation: shake 0.3s; }
 
-        .shake-btn {
-            animation: shake 0.3s;
-        }
-
-        /* Custom Popup */
+        /* Popup */
         .popup-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); display: none; justify-content: center;
+            align-items: center; z-index: 100;
         }
-
         .popup-content {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            max-width: 80%;
+            background: white; padding: 30px; border-radius: 15px;
+            text-align: center; max-width: 80%;
             animation: popIn 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
+        @keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
 
-        @keyframes popIn {
-            0% { transform: scale(0); }
-            100% { transform: scale(1); }
-        }
-
-        /* Background หัวใจลอย */
-        .hearts {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 1;
-            pointer-events: none;
-        }
-        
+        /* Hearts Background */
+        .hearts { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: 1; pointer-events: none; }
         .heart {
-            position: absolute;
-            bottom: -100px;
-            background-color: rgba(255, 255, 255, 0.5);
-            width: 20px;
-            height: 20px;
-            transform: rotate(45deg);
-            animation: floatUp 10s linear infinite;
+            position: absolute; bottom: -100px; background-color: rgba(255, 255, 255, 0.5);
+            width: 20px; height: 20px; transform: rotate(45deg); animation: floatUp 10s linear infinite;
         }
         .heart::before, .heart::after {
-            content: "";
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background-color: rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
+            content: ""; position: absolute; width: 20px; height: 20px;
+            background-color: rgba(255, 255, 255, 0.5); border-radius: 50%;
         }
-        .heart::before { top: -10px; left: 0; }
-        .heart::after { top: 0; left: -10px; }
-
+        .heart::before { top: -10px; left: 0; } .heart::after { top: 0; left: -10px; }
         @keyframes floatUp {
             0% { transform: translateY(0) rotate(45deg); opacity: 0.8; }
             100% { transform: translateY(-100vh) rotate(45deg); opacity: 0; }
         }
 
-        /* Animation เครื่องบิน */
-        .airplane-scene {
+        /* --- CSS สำหรับ Map Animation --- */
+        .map-scene {
             position: relative;
-            height: 300px;
-            margin: 30px 0;
+            width: 100%;
+            height: 250px; /* เพิ่มความสูงนิดนึง */
+            background-color: #a2d9ff; /* สีน้ำทะเล */
+            border-radius: 15px;
+            margin: 20px 0;
+            overflow: hidden;
+            border: 3px solid #fff;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
         }
 
-        .airplane {
-            font-size: 80px;
+        /* จัดการ SVG ภายในแผนที่ */
+        .map-svg-layer {
             position: absolute;
-            left: -100px;
-            top: 50%;
-            transform: translateY(-50%);
-            animation: flyAcross 4s ease-in-out infinite;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
         }
 
-        @keyframes flyAcross {
-            0% {
-                left: -100px;
-                top: 60%;
-                transform: translateY(-50%) rotate(-5deg);
-            }
-            25% {
-                top: 40%;
-            }
-            50% {
-                top: 30%;
-            }
-            75% {
-                top: 45%;
-            }
-            100% {
-                left: calc(100% + 100px);
-                top: 60%;
-                transform: translateY(-50%) rotate(5deg);
-            }
+        /* ประเทศไทย (ขวานทอง) */
+        .land-thai {
+            fill: #f1c40f; /* สีทอง */
+            stroke: #d35400;
+            stroke-width: 2;
+            filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.2));
         }
 
-        .cloud {
+        /* ญี่ปุ่น (เกาะ) */
+        .land-japan {
+            fill: #ffb7b2; /* สีชมพู */
+            stroke: #ff6b6b;
+            stroke-width: 2;
+            filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.2));
+        }
+
+        /* เส้นทางการบิน */
+        .path-line {
+            fill: none;
+            stroke: #fff;
+            stroke-width: 2;
+            stroke-dasharray: 6, 4;
+            opacity: 0.8;
+        }
+
+        /* ตัวหนังสือชื่อประเทศ */
+        .country-label {
             position: absolute;
-            font-size: 50px;
-            opacity: 0.7;
-            animation: floatCloud 15s linear infinite;
+            font-size: 12px;
+            font-weight: bold;
+            color: #444;
+            background: rgba(255,255,255,0.8);
+            padding: 2px 6px;
+            border-radius: 4px;
+            z-index: 2;
         }
 
-        .cloud:nth-child(1) {
-            top: 20%;
-            animation-delay: 0s;
+        /* ตัวเครื่องบิน */
+        .plane-icon {
+            position: absolute;
+            font-size: 28px;
+            z-index: 3;
+            /* กำหนดเส้นทางบินจาก ขวานทอง (ประมาณ 60,160) ไป ญี่ปุ่น (ประมาณ 320,60) */
+            offset-path: path('M 60 160 Q 180 40 320 60');
+            offset-rotate: auto 0deg;
+            animation: flyMap 3s ease-in-out forwards; /* บิน 3 วิ แล้วหยุด */
         }
 
-        .cloud:nth-child(2) {
-            top: 60%;
-            animation-delay: 5s;
+        @keyframes flyMap {
+            0% { offset-distance: 0%; transform: scale(0.8); }
+            50% { transform: scale(1.2); }
+            100% { offset-distance: 100%; transform: scale(1); }
         }
 
-        .cloud:nth-child(3) {
-            top: 40%;
-            animation-delay: 10s;
+        /* เมฆตกแต่ง */
+        .map-cloud {
+            position: absolute; font-size: 24px; opacity: 0.8;
+            animation: floatMapCloud 15s linear infinite;
+            z-index: 2;
         }
-
-        @keyframes floatCloud {
-            0% {
-                left: -100px;
-            }
-            100% {
-                left: calc(100% + 100px);
-            }
+        @keyframes floatMapCloud {
+            from { transform: translateX(-50px); } to { transform: translateX(400px); }
         }
 
     </style>
@@ -313,17 +242,46 @@
 
         <div id="page7" class="page">
             <h1>🎌 ไปญี่ปุ่นกันเลย!</h1>
-            <div class="airplane-scene">
-                <div class="airplane">✈️</div>
-                <div class="cloud">☁️</div>
-                <div class="cloud">☁️</div>
-                <div class="cloud">☁️</div>
+            
+            <div class="map-scene">
+                <svg class="map-svg-layer" viewBox="0 0 400 250" preserveAspectRatio="none">
+                    
+                    <path class="path-line" d="M 60 160 Q 180 40 320 60" />
+
+                    <path class="land-thai" d="
+                        M 45 220 
+                        L 60 220 
+                        L 60 170 
+                        L 85 160 
+                        L 85 130 
+                        L 60 120 
+                        L 35 130 
+                        L 35 170 
+                        L 45 180 
+                        Z" />
+
+                    <g class="land-japan">
+                         <ellipse cx="290" cy="85" rx="10" ry="8" transform="rotate(-30 290 85)" />
+                        <path d="M 300 75 Q 330 60 350 50 L 355 60 Q 330 75 305 85 Z" />
+                        <circle cx="360" cy="45" r="10" />
+                    </g>
+
+                </svg>
+
+                <div class="country-label" style="bottom: 20px; left: 30px;">Thailand 🇹🇭</div>
+                <div class="country-label" style="top: 20px; right: 20px;">Japan 🇯🇵</div>
+
+                <div class="plane-icon">✈️</div>
+
+                <div class="map-cloud" style="top: 20%; left: 10%; animation-delay: 0s;">☁️</div>
+                <div class="map-cloud" style="top: 70%; left: 50%; animation-delay: 5s;">☁️</div>
+                <div class="map-cloud" style="top: 40%; left: 80%; animation-delay: 2s;">☁️</div>
             </div>
+
             <p style="margin-top: 20px;">
-                <b>เย้ๆๆ ไปกันน้าา! 🎉</b><br><br>
-                รอวันนั้นกันนะจ๊ะที่รัก 💕<br>
-                พี่โอเว่นจะดูแลเธอดีๆเลย 🥰<br><br>
-                <span style="font-size: 24px;">🇯🇵 ❤️</span>
+                <b>เย้ๆๆ ไปกันน้าา! 🎉</b><br>
+                พี่โอเว่นจะดูแลเธอดีๆ เลย 🥰<br><br>
+                <span style="font-size: 20px; color: #ff6b6b;">จากขวานทอง 🇹🇭 สู่แดนปลาดิบ 🇯🇵</span>
             </p>
         </div>
     </div>
